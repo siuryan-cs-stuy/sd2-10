@@ -16,33 +16,36 @@ var createSvg = function(x, y, r, c, element) {
       this.element.setAttribute("cy", this.y);
       this.element.setAttribute("r", this.r);
       this.element.setAttribute("fill", this.c);
-      svg.appendChild(this.element);
-
       this.element.addEventListener("click", this.changeColor);
+      svg.appendChild(this.element);
     },
     changeColor: function(e) {
-      this.setAttribute("fill", "red");
+      if (this.getAttribute("fill") == "lightsteelblue") {
+        console.log("change color of : " + this);
+        this.setAttribute("fill", "red");
+      } else {
+        this.remove(e);
+        var newElement = createSvg(Math.random() * width, Math.random() * height, radius, "lightsteelblue", "circle");
+        newElement.display();
+      }
       e.stopPropagation();
-      this.addEventListener("click", this.remove);
     },
     remove: function() {
       svg.removeChild(this.element);
-      var newElement = createSvg(Math.random() * width, Math.random() * height, radius, "blue", "circle");
-      console.log(newElement);
-      newElement.display();
     }
   }
 
   return obj;
-}
+};
 
 svg.addEventListener("click", function() {
   var circle = createSvg(event.offsetX, event.offsetY, radius, "lightsteelblue", "circle");
-  console.log(circle);
   circle.display();
 });
 
 var clearButton = document.getElementById("clearButton");
 clearButton.addEventListener("click", function() {
-  svg.innerHTML = "";
+  while(svg.hasChildNodes()){
+    svg.removeChild(svg.firstChild);
+  }
 });
